@@ -29,7 +29,7 @@ def auto_canny(image, sigma=0.33):
 
 ### Picture Preprocess
 # Read Picture 
-image = cv2.imread('content.jpg')
+image = cv2.imread('test.jpg')
 # display(image)
 
 display(image)
@@ -115,7 +115,7 @@ Answer = [(0,0)]
 for c in cnts :
     (x,y,w,h) = cv2.boundingRect(c)
     print(x,y,w,h)
-    if x>30 and x<250 and y>15 and y<500:
+    if x>30 and x<300 and y>15 and y<500:
         M = cv2.moments(c)
         print(M)
         cX = int(M["m10"] / M["m00"])
