@@ -106,7 +106,7 @@ warped = cv2.resize(warped, (width1,height1), cv2.INTER_LANCZOS4)
 # Mean Filter
 ChQImg = cv2.blur(thresh, (8,8))
 display(ChQImg)
-ChQImg = cv2.threshold(ChQImg, 10,255, cv2.THRESH_BINARY)[1]
+ChQImg = cv2.threshold(ChQImg, 5,255, cv2.THRESH_BINARY)[1]
 display(ChQImg)
 
 cnts = cv2.findContours(ChQImg, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
@@ -115,7 +115,7 @@ Answer = [(0,0)]
 for c in cnts :
     (x,y,w,h) = cv2.boundingRect(c)
     print(x,y,w,h)
-    if x>30 and y>15 and y<500:
+    if x>30 and x<250 and y>15 and y<500:
         M = cv2.moments(c)
         print(M)
         cX = int(M["m10"] / M["m00"])
