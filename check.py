@@ -8,7 +8,7 @@ import imutils
 from imutils.perspective import four_point_transform
 
 width1 = 400
-height1 = 600
+height1 = 1000
 
 
 def display(image):
@@ -29,19 +29,19 @@ def auto_canny(image, sigma=0.33):
 
 ### Picture Preprocess
 # Read Picture 
-image = cv2.imread('draw.jpg')
+image = cv2.imread('content.jpg')
 # display(image)
 
-
+display(image)
 # Convert into gray Picture 
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 # Guass Filter
-blurred = cv2.GaussianBlur(gray, (3,3), 0)
+blurred = cv2.GaussianBlur(gray, (7,7), 0)
 # Adapt Binary => Bitmap
 blurred = cv2.adaptiveThreshold(blurred,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,51,2)
 # Add padding
 blurred = cv2.copyMakeBorder(blurred,5,5,5,5,cv2.BORDER_CONSTANT,value=(255,255,255))
-# display(blurred)
+display(blurred)
 
 
 
@@ -78,7 +78,7 @@ newimage = image.copy()
 for i in docCnt :
     cv2.circle(newimage, (i[0][0],i[0][1]), 5, (0,0,255), -1)
 
-# display(newimage)
+display(newimage)
 
 
 
@@ -96,15 +96,17 @@ print(docCnt.reshape(4,2))
 ### Recognized Multiple Choose
 # Resize into standard width & height
 # gray to BMP
-thresh = cv2.adaptiveThreshold(warped,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,53,2)
-# thresh = cv2.adaptiveThreshold(image,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,53,2)
+thresh = cv2.adaptiveThreshold(warped,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,53,1)
+# thresh = cv2.adaptiveThreshold(warped,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,53,2)
 # Resize picture which is possible to be used
+sample = cv2.resize(sample, (width1,height1), cv2.INTER_LANCZOS4)
 thresh = cv2.resize(thresh, (width1,height1), cv2.INTER_LANCZOS4)
 paper = cv2.resize(paper, (width1,height1), cv2.INTER_LANCZOS4)
 warped = cv2.resize(warped, (width1,height1), cv2.INTER_LANCZOS4)
 # Mean Filter
-ChQImg = cv2.blur(thresh, (23,23))
-ChQImg = cv2.threshold(ChQImg, 130,225, cv2.THRESH_BINARY)[1]
+ChQImg = cv2.blur(thresh, (8,8))
+display(ChQImg)
+ChQImg = cv2.threshold(ChQImg, 10,255, cv2.THRESH_BINARY)[1]
 display(ChQImg)
 
 cnts = cv2.findContours(ChQImg, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
@@ -113,12 +115,13 @@ Answer = [(0,0)]
 for c in cnts :
     (x,y,w,h) = cv2.boundingRect(c)
     print(x,y,w,h)
-    if (w>=5 and h>=5) and y>15 and y<500:
+    if x>30 and y>15 and y<500:
         M = cv2.moments(c)
+        print(M)
         cX = int(M["m10"] / M["m00"])
         cY = int(M["m01"] / M["m00"])
         cv2.drawContours(paper, c, -1, (0,0,255), 5, lineType=0)
-        cv2.circle(paper, (cX,cY), 7, (255,255,255), -1)
+        cv2.circle(paper, (cX,cY), 5, (255,255,255), -1)
         Answer.append((cX,cY))
 
 display(sample)

@@ -1,7 +1,7 @@
 NUM = ['①','②','③','④','⑤','⑥','⑦','⑧','⑨','⓪','⨁','⊖']
 ENL = ['ⓐ','ⓑ','ⓒ','ⓓ','ⓔ','ⓕ','ⓖ','ⓗ','ⓘ','ⓙ','ⓚ','ⓛ','ⓜ','ⓝ','ⓞ','ⓟ','ⓠ','ⓡ','ⓢ','ⓣ','ⓤ','ⓥ','ⓦ','ⓧ','ⓨ','ⓩ']
 EN  = ['Ⓐ','Ⓑ','Ⓒ','Ⓓ','Ⓔ','Ⓕ','Ⓖ','Ⓗ','Ⓘ','Ⓙ','Ⓚ','Ⓛ','Ⓜ','Ⓝ','Ⓞ','Ⓟ','Ⓠ','Ⓡ','Ⓢ','Ⓣ','Ⓤ','Ⓥ','Ⓦ','Ⓧ','Ⓨ','Ⓩ']
-
+TEST = ['◯ ','◯ ','◯ ','◯ ','◯ ','◯ ','◯ ','◯ ','◯ ','◯ ']
 from PIL import Image, ImageDraw, ImageFont
 
 # x,y,w,h = cv2.boundingRect(cnt)
@@ -9,7 +9,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 class Model():
 
-    def __init__(self,width=400, height=600, total_quest=10, font_size=18, font_color=(0,0,0,255)) :
+    def __init__(self,width=400, height=1000, total_quest=10, font_size=18, font_color=(190,190,190,255)) :
         self.count = 0
         self.width = width
         self.height = height
@@ -40,6 +40,8 @@ class Model():
             symbol = ENL
         if type == 'NUM':
             symbol = NUM
+        if type == 'TEST':
+            symbol = TEST
         for _ in range(question_num):
             self.drawing( ''.join(self.__line__(symbol,option_num)), location=(self.font_size, (self.count)*self.font_size) )
 
@@ -62,7 +64,8 @@ class Model():
         pass
 
 model = Model()
-model.question(14,5)
+model.question(25,10,type='EN')
+model.question(25,8,type='TEST')
 # model.question(20,20)
 # model.question(20,12,type='NUM')
 # model.question(2,2,type='ENL')
