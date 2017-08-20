@@ -9,7 +9,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 class Model():
 
-    def __init__(self,width=400, height=1000, total_quest=10, font_size=25, font_color=(190,190,190,255)) :
+    def __init__(self,width=800, height=2000, total_quest=10, font_size=50, font_color=(190,190,190,255)) :
         self.count = 0
         self.width = width
         self.height = height
@@ -53,12 +53,21 @@ class Model():
         self.canvas.save( "test.jpg" )
 
 
-    def border(self,offset=5, width=5):
+    def border(self,offset=10, width=3):
         draw = ImageDraw.Draw( self.canvas )
-        cor = (offset,offset, self.width-offset-width,self.height-offset-width)
+        cor = (0,0,self.width,self.height)
+        # for i in range(offset):
+        #     draw.rectangle(cor ,outline=(150,150,150))   
+        #     cor = (cor[0]+1,cor[1]+1, cor[2]-1,cor[3]-1) 
+
+        cor = (offset,offset, self.width-offset,self.height-offset)
+        
+        
         for i in range(width):
             draw.rectangle(cor ,outline=(0,0,0))   
-            cor = (cor[0]+1,cor[1]+1, cor[2]+1,cor[3]+1) 
+            cor = (cor[0]+1,cor[1]+1, cor[2]-1,cor[3]-1) 
+
+        # draw.rectangle(cor ,outline=(0,0,00))   
         # self.canvas.save( "test.png", "PNG" )
         self.canvas.save( "test.jpg" )
         
@@ -67,11 +76,11 @@ class Model():
         pass
 
 model = Model()
-model.question(25,10,type='EN')
-# model.question(25,8,type='TEST')
+model.question(10,8,type='EN')
+model.question(5,8,type='TEST')
 # model.question(20,20)
-# model.question(20,12,type='NUM')
-# model.question(2,2,type='ENL')
+model.question(10,10,type='NUM')
+model.question(10,12,type='ENL')
 # model.question(6,7,type='NUM')
 # model.question(2,17,type='EN')
 model.border()
