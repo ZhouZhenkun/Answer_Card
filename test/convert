@@ -1,0 +1,2 @@
+https://www.freepdfconvert.com/zh-hant/pdf-jpg
+convert -quality 100 *.pdf jpg

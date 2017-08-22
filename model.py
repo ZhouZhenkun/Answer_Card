@@ -1,7 +1,8 @@
 NUM = ['①','②','③','④','⑤','⑥','⑦','⑧','⑨','⓪','⨁','⊖']
 ENL = ['ⓐ','ⓑ','ⓒ','ⓓ','ⓔ','ⓕ','ⓖ','ⓗ','ⓘ','ⓙ','ⓚ','ⓛ','ⓜ','ⓝ','ⓞ','ⓟ','ⓠ','ⓡ','ⓢ','ⓣ','ⓤ','ⓥ','ⓦ','ⓧ','ⓨ','ⓩ']
 EN  = ['Ⓐ','Ⓑ','Ⓒ','Ⓓ','Ⓔ','Ⓕ','Ⓖ','Ⓗ','Ⓘ','Ⓙ','Ⓚ','Ⓛ','Ⓜ','Ⓝ','Ⓞ','Ⓟ','Ⓠ','Ⓡ','Ⓢ','Ⓣ','Ⓤ','Ⓥ','Ⓦ','Ⓧ','Ⓨ','Ⓩ']
-TEST = ['◯ ','◯ ','◯ ','◯ ','◯ ','◯ ','◯ ','◯ ','◯ ','◯ ']
+
+
 from PIL import Image, ImageDraw, ImageFont
 
 # x,y,w,h = cv2.boundingRect(cnt)
@@ -75,12 +76,28 @@ class Model():
     def setAnswer(self):
         pass
 
+
+# Test
+# model = Model()
+# model.question(10,10,type='EN')
+# model.question(5,10,type='TEST')
+# # model.question(20,20)
+# model.question(10,10,type='NUM')
+# model.question(10,10,type='ENL')
+# # model.question(6,7,type='NUM')
+# # model.question(2,17,type='EN')
+# model.border()
+
+
 model = Model()
-model.question(10,8,type='EN')
-model.question(5,8,type='TEST')
-# model.question(20,20)
-model.question(10,10,type='NUM')
-model.question(10,12,type='ENL')
-# model.question(6,7,type='NUM')
-# model.question(2,17,type='EN')
+
+# 學號
+model.question(6,10,type='NUM')
+# 考卷編號  （）
+model.question(1,5,type='EN')
+model.question(5,10,type='NUM')
+
+model.question(20,4,type='EN')
+model.question(10,10,type='EN')
+model.question(16,4,type='EN')
 model.border()
