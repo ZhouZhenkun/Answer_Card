@@ -4,13 +4,13 @@ EN  = ['Ⓐ','Ⓑ','Ⓒ','Ⓓ','Ⓔ','Ⓕ','Ⓖ','Ⓗ','Ⓘ','Ⓙ','Ⓚ','Ⓛ','
 
 
 from PIL import Image, ImageDraw, ImageFont
-
+ 
 # x,y,w,h = cv2.boundingRect(cnt)
 # cv2.rectangle(img,(x,y),(x+w,y+h),(0,255,0),2)
 
 class Model():
 
-    def __init__(self,width=800, height=2000, total_quest=10, font_size=50, font_color=(190,190,190,255)) :
+    def __init__(self,width=800, height=2000, total_quest=10, font_size=30, font_color=(190,190,190,255)) :
         self.count = 0
         self.width = width
         self.height = height
