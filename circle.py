@@ -42,7 +42,7 @@ def crop_circle(image):
     # M = cv2.moments(cnt)
     # cx = int(M['m10']/M['m00'])
     # cy = int(M['m01']/M['m00'])
-
+    
     ### With Center
     x,y,w,h = cv2.boundingRect(cnt)
     cx = int(x+w/2)
@@ -73,7 +73,7 @@ def draw_word(letter,path=''):
     file_name = letter + '.png'
     image = draw_letter(letter)
     image = crop_circle(image)
-    image = setColor(image,0,0,0)
+    image = setColor(image,190,190,190)
     image.save(path + file_name)
 
 

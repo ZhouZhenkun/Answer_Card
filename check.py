@@ -10,7 +10,7 @@ from imutils import contours
 import argparse
 import imutils
 import cv2
- 
+  
 # # construct the argument parse and parse the arguments
 # ap = argparse.ArgumentParser()
 # ap.add_argument("-i", "--image", required=True,
