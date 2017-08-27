@@ -1,5 +1,6 @@
 
 from PIL import Image, ImageDraw, ImageFont
+import cv2
 import numpy as np
 import check
 class Model():
@@ -15,7 +16,7 @@ class Model():
         self.canvas = Image.new( "RGBA", (self.width,self.height) )
         self.draw = ImageDraw.Draw( self.canvas )
         self.questInit()
-        self.questStart = None
+        self.questStart = 1
 
 
     def drawText(self,text,location=(0,0)):
@@ -152,20 +153,44 @@ class Model():
         self.canvas.paste(image,location)
         # self.canvas.save( "test.png" )
 
-    def setAnswer(self):
-        pass
+
+###############################################################
+
+
+###  Collect the output Question Block & Complete below function
+
+    def getAns(self,cnts):
+        ans = check.getMoment(cnts,bound=(self.font_size*2,self.questStart,self.width-self.padding,self.height-self.padding))
+        # ... #
+        print('Answer : ',ans)
+        return ans
+
+    def getStudendID(self,cnts):
+        sid = check.getMoment(cnts,bound=(self.font_size*2,self.padding,int(self.width/2),self.questStart-self.font_size))
+        # ... #
+        print('StudentID : ',sid)
+        return sid
+
+    def getTestID(self,cnts):
+        tid = check.getMoment(cnts,bound=(int(self.width/2),self.padding,self.width-self.padding,self.questStart-self.font_size))
+        # ... #
+        print('TestID : ',tid)
+        return tid
+
+    def result(self,image):
+        cnts = check.getBlack(image)
+        ans = self.getAns(cnts)
+        sid = self.getStudendID(cnts)
+        tid = self.getTestID(cnts)
+        return {'ans':ans,'sid':sid,'tid':tid}
 
 
 model = Model()
-model.studentID(6)
-model.testID()
-# model.questInit()
-# model.quest(40,'ABCDEFGHIJ')
+# model.studentID(6)
+# model.testID()
+# model.quest(74 ,'ABCDEFGHIJ')
+# model.border()
 
-# model.quest(46 ,'ABCD')
 
-# model.quest(46 ,'ABCD')
-
-model.quest(74 ,'ABCDEFGHIJ')
-# model.quest(16,'1234')
-model.border()
+image = cv2.imread('./test/test600-p3.png')
+model.result(image)

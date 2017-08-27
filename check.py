@@ -44,9 +44,8 @@ def getMoment(cnts,bound=(200,50,4480,3980)):
 
     return Answer
 
-def getBlack(path,width=4500,height=4000):
+def getBlack(image,width=4500,height=4000):
     ### Picture Preprocess
-    image = cv2.imread(path)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     blurred = cv2.GaussianBlur(gray, (5,5), 0)
     edged = auto_canny(blurred)
@@ -83,6 +82,7 @@ def getBlack(path,width=4500,height=4000):
 
 
 
-
-cnt = getBlack('./test/test600-p3.png')
-print(getMoment(cnt))
+# # Usage:
+# image = cv2.imread('./test/test600-p3.png')
+# cnt = getBlack(image)
+# print(getMoment(cnt))
