@@ -49,9 +49,10 @@ def crop_circle(image):
     cy = int(y+h/2)
     radius = 45
     width=5
+    padding = 10
     circle = [int(cx)-radius,int(cy)-radius,int(cx)+radius,int(cy)+radius]
     draw_circle(image,circle, outline =(0,0,0),width=width)
-    bound = (int(cx)-radius-width,int(cy)-radius-width,int(cx)+radius+width,int(cy)+radius+width)
+    bound = (int(cx)-radius-width-padding,int(cy)-radius-width-padding,int(cx)+radius+width+padding,int(cy)+radius+width+padding)
     return image.crop(bound)
 
 
