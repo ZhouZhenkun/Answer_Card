@@ -12,7 +12,7 @@ model.border()
 model.save()
 ```
 
-![](https://github.com/bearbear1100/Answer_Card/blob/master/display/01.jpg =250x)
+<img src="https://github.com/bearbear1100/Answer_Card/blob/master/display/01.jpg" width="200">
 
 Read image (Black Enough)
 
