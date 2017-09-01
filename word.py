@@ -76,11 +76,11 @@ def draw_word_in_circle(letter,path=''):
     image = setColor(image,190,190,190)
     image.save(path + file_name)
 
-
-for c in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890+-' :
-    try :
-        draw_word_in_circle(c,path='./icon/')
-    except :
-        logging.warning('Directory not found, try to build \"icon\"')
-        os.mkdir('icon')
-        draw_word_in_circle(c,path='./icon/')
+# # Usage
+# for c in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890+-' :
+#     try :
+#         draw_word_in_circle(c,path='./icon/')
+#     except :
+#         logging.warning('Directory not found, try to build \"icon\"')
+#         os.mkdir('icon')
+#         draw_word_in_circle(c,path='./icon/')

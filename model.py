@@ -3,6 +3,8 @@ from PIL import Image, ImageDraw, ImageFont
 import cv2
 import numpy as np
 import check
+import word
+
 class Model():
 
     def __init__(self,width=4500, height=4000, font_color=(190,190,190,255)) :
@@ -25,6 +27,9 @@ class Model():
         self.border_width = 10
 
 
+###############################################################
+                    # Make Model
+###############################################################
     def drawText(self,text,location=(0,0)):
         self.draw.text( (location), text, font=self.font, fill=self.font_color )
 
@@ -56,7 +61,17 @@ class Model():
             self.drawText(''.join(self.questNum()), location=location )
         
     def optionChain(self,sequence):
-        files = ['icon/{}.png'.format(c) for c in sequence ]
+        try: 
+            files = ['icon/{}.png'.format(c) for c in sequence ]
+        except :
+            for c in sequence :
+                try :
+                    draw_word_in_circle(c,path='./icon/')
+                except :
+                    logging.warning('Directory not found, try to build \"icon\"')
+                    os.mkdir('icon')
+                    draw_word_in_circle(c,path='./icon/')
+            files = ['icon/{}.png'.format(c) for c in sequence ]
         images = list(map(Image.open, files))
         widths, heights = zip(*(i.size for i in images))
         total_width = sum(widths)
@@ -104,24 +119,15 @@ class Model():
         for i in range(width):
             self.draw.rectangle(cor ,outline=(0,0,0))   
             cor = (cor[0]+1,cor[1]+1, cor[2]-1,cor[3]-1) 
-        self.canvas.save( "test.png" )
-        
-    # 學號格
-    def studentID(self,digits):
-        self.drawText('學',location=(self.padding,200))
-        self.drawText('號',location=(self.padding,400))
-        image = self.optionRect(digits,'1234567890',(200,self.padding),self.student_option)
-        self.questBorderY(image.size[1]+self.pic_size+int(self.padding/2))
-        
-    def testID(self):
-        offset = int(self.width/2)
-        self.drawText('考',location=(offset + self.padding,150))
-        self.drawText('卷',location=(offset + self.padding,270))
-        self.drawText('編',location=(offset + self.padding,390))
-        self.drawText('號',location=(offset + self.padding,510))
-        image = self.optionRect(1,'ABCDEFGHIJ',(offset + 200,self.padding), self.test_option)
-        image = self.optionRect(5,'1234567890',(offset + 200,image.size[1]+self.padding), self.test_option)
-        self.questBorderY(image.size[1]+self.pic_size+int(self.padding/2))
+
+
+    def paste(self, image, location):
+        self.canvas.paste(image,location)
+
+
+    def save(self):
+        self.canvas.save( "model.png" )
+
 
     def quest(self,num,sequence='ABCD'):
         if self.questStart == -1 :
@@ -147,12 +153,34 @@ class Model():
                 else :
                     self.questInit(self.quest_left,self.quest_down)
 
-    def paste(self, image, location):
-        self.canvas.paste(image,location)
+
+
+####################            自訂              ##############################
+    
+    # 學號格
+    def studentID(self,digits):
+        self.drawText('學',location=(self.padding,200))
+        self.drawText('號',location=(self.padding,400))
+        image = self.optionRect(digits,'1234567890',(200,self.padding),self.student_option)
+        self.questBorderY(image.size[1]+self.pic_size+int(self.padding/2))
+    
+    # 測驗格 
+    def testID(self):
+        offset = int(self.width/2)
+        self.drawText('考',location=(offset + self.padding,150))
+        self.drawText('卷',location=(offset + self.padding,270))
+        self.drawText('編',location=(offset + self.padding,390))
+        self.drawText('號',location=(offset + self.padding,510))
+        image = self.optionRect(1,'ABCDEFGHIJ',(offset + 200,self.padding), self.test_option)
+        image = self.optionRect(5,'1234567890',(offset + 200,image.size[1]+self.padding), self.test_option)
+        self.questBorderY(image.size[1]+self.pic_size+int(self.padding/2))
+
+
 
 
 ###############################################################
-
+                    # Check Answer
+###############################################################
 
     def inside(self,list_option,dot):
         if dot[1] < list_option[0][1] or dot[1] > (list_option[0][1] + self.pic_size) :
@@ -176,15 +204,6 @@ class Model():
                     except :
                         result[(i+1)] = options[0][i][inside]
         return result
-
-    # # Debug
-    # def getOption(self):
-    #     print(self.student_option)
-    #     print(self.test_option)
-    #     print(self.quest_option)
-    #     print(len(self.quest_option[0]),len(self.quest_option[1]))
-
-###  Collect the output Question Block & Complete below function
 
     def getAns(self,cnts):
         ansm = check.getMoment(cnts,bound=(self.font_size*2,self.questStart,self.width-self.padding,self.height-self.padding))
@@ -211,12 +230,3 @@ class Model():
         return {'ans':ans,'sid':sid,'tid':tid}
 
 
-
-model = Model()
-model.studentID(6)
-model.testID()
-model.quest(75 ,'ABCDEFGHIJ')
-# model.border()
-
-image = cv2.imread('./test/test600-p2.png')
-print(model.result(image))
