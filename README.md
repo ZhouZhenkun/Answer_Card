@@ -12,7 +12,7 @@ model.border()
 model.save()
 ```
 
-<img src="https://github.com/bearbear1100/Answer_Card/blob/master/display/01.jpg" width="200">
+<img src="https://github.com/bearbear1100/Answer_Card/blob/master/display/01.jpg" width="500">
 
 Read image (Black Enough)
 
@@ -21,7 +21,9 @@ image = cv2.imread('./test/test600-p2.png')
 print(model.result(image))
 ```
 
-![](https://github.com/bearbear1100/Answer_Card/blob/master/display/02.jpg =250x)
+<img src="https://github.com/bearbear1100/Answer_Card/blob/master/display/02.jpg" width="500">
 
+
+Result : 
 
 ![](https://github.com/bearbear1100/Answer_Card/blob/master/display/03.png )
