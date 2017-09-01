@@ -79,8 +79,8 @@ def draw_word_in_circle(letter,path=''):
 
 for c in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890+-' :
     try :
-        draw_word_in_circle(c,path='./result/')
+        draw_word_in_circle(c,path='./icon/')
     except :
-        logging.warning('Directory not found, try to build \"result\"')
-        os.mkdir('result')
-        draw_word_in_circle(c,path='./result/')
+        logging.warning('Directory not found, try to build \"icon\"')
+        os.mkdir('icon')
+        draw_word_in_circle(c,path='./icon/')

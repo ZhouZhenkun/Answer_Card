@@ -56,13 +56,13 @@ class Model():
             self.drawText(''.join(self.questNum()), location=location )
         
     def optionChain(self,sequence):
-        files = ['result/{}.png'.format(c) for c in sequence ]
+        files = ['icon/{}.png'.format(c) for c in sequence ]
         images = list(map(Image.open, files))
         widths, heights = zip(*(i.size for i in images))
         total_width = sum(widths)
         max_height = max(heights)
         assert max_height == self.pic_size and total_width == (len(sequence) * self.pic_size), \
-            'Make Sure the size of result/*.png is {}x{}'.format(self.pic_size,self.pic_size)
+            'Make Sure the size of icon/*.png is {}x{}'.format(self.pic_size,self.pic_size)
         option = Image.new('RGBA', (total_width, max_height),(255,255,255,0))
         x = 0
         block = []
@@ -217,7 +217,6 @@ model.studentID(6)
 model.testID()
 model.quest(75 ,'ABCDEFGHIJ')
 # model.border()
-# model.getOption()
 
 image = cv2.imread('./test/test600-p2.png')
 print(model.result(image))
