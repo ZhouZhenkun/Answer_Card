@@ -2,8 +2,8 @@
 from PIL import Image, ImageDraw, ImageFont
 import cv2
 import numpy as np
-import check
-import word
+from . import check
+from .word import *
 
 class Model():
 
@@ -36,13 +36,13 @@ class Model():
     def questInit(self, x=0, y=0) :
         self.quest_left = x
         self.quest_up = y
-        self.quest_right = 0 
+        self.quest_right = 0
         self.quest_down = 0
 
     def questBorderX(self,x=0):
         if self.quest_right < x :
             self.quest_right = x
-        
+
     def questBorderY(self,y=0):
         if self.quest_down < y :
             self.quest_down = y
@@ -59,19 +59,9 @@ class Model():
         for x in range(num):
             location = (self.quest_left + self.padding, self.questStart+(self.count%max)*(self.font_size))
             self.drawText(''.join(self.questNum()), location=location )
-        
+
     def optionChain(self,sequence):
-        try: 
-            files = ['icon/{}.png'.format(c) for c in sequence ]
-        except :
-            for c in sequence :
-                try :
-                    draw_word_in_circle(c,path='./icon/')
-                except :
-                    logging.warning('Directory not found, try to build \"icon\"')
-                    os.mkdir('icon')
-                    draw_word_in_circle(c,path='./icon/')
-            files = ['icon/{}.png'.format(c) for c in sequence ]
+        files = ['icon/{}.png'.format(c) for c in sequence ]
         images = list(map(Image.open, files))
         widths, heights = zip(*(i.size for i in images))
         total_width = sum(widths)
@@ -90,7 +80,7 @@ class Model():
 
 
     def optionRect(self,num,sequence,location,stored):
-        if num == 0 : 
+        if num == 0 :
             return
         options, blockX = self.optionChain(sequence)
         temp = Image.new('RGBA', ((len(sequence) * self.pic_size), num*self.pic_size),(255,255,255,0))
@@ -114,11 +104,11 @@ class Model():
         offset = self.border_offset
         cor = (0,0,self.width,self.height)
         cor = (offset,offset,self.width-offset,self.height-offset)
-        
+
         width = self.border_width
         for i in range(width):
-            self.draw.rectangle(cor ,outline=(0,0,0))   
-            cor = (cor[0]+1,cor[1]+1, cor[2]-1,cor[3]-1) 
+            self.draw.rectangle(cor ,outline=(0,0,0))
+            cor = (cor[0]+1,cor[1]+1, cor[2]-1,cor[3]-1)
 
 
     def paste(self, image, location):
@@ -130,6 +120,7 @@ class Model():
 
 
     def quest(self,num,sequence='ABCD'):
+        self.num = num
         if self.questStart == -1 :
             self.questStart = self.quest_down
         self.questInit(self.quest_left,self.questStart)
@@ -156,14 +147,14 @@ class Model():
 
 
 ####################            自訂              ##############################
-    
+
     # 學號格
     def studentID(self,digits):
         self.drawText('學',location=(self.padding,200))
         self.drawText('號',location=(self.padding,400))
         image = self.optionRect(digits,'1234567890',(200,self.padding),self.student_option)
         self.questBorderY(image.size[1]+self.pic_size+int(self.padding/2))
-    
+
     # 測驗格 
     def testID(self):
         offset = int(self.width/2)
@@ -189,7 +180,7 @@ class Model():
         for i,opt in enumerate(list_option):
             if x > opt[0] and x < (opt[0] + self.pic_size) :
                 return i
-        return -1 
+        return -1
 
     def display_moment(self,moment,options):
         result = {}
@@ -197,9 +188,9 @@ class Model():
             for i,opt in enumerate(options[1]) :
                 inside = self.inside(opt,m)
                 if inside != -1:
-                    try : 
+                    try :
                         if result[(i+1)].find(options[0][i][inside]) == -1 :
-                            result[(i+1)] += options[0][i][inside]   
+                            result[(i+1)] += options[0][i][inside]
                             result[(i+1)] = ''.join(sorted(result[(i+1)]))
                     except :
                         result[(i+1)] = options[0][i][inside]
@@ -224,7 +215,10 @@ class Model():
 
     def result(self,image):
         cnts = check.getBlack(image)
-        ans = self.getAns(cnts)
+        allans = self.getAns(cnts)
+        ans = ['' for _ in range(self.num)]
+        for num, a in allans.items():
+            ans[num - 1] = a
         sid = self.getStudendID(cnts)
         tid = self.getTestID(cnts)
         return {'ans':ans,'sid':sid,'tid':tid}
