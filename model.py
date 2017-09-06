@@ -214,7 +214,7 @@ class Model():
         return test_id
 
     def result(self,image,imgmode = 'RGB'):
-        cnts = check.getBlack(image, imgmode)
+        cnts = check.getBlack(image, imgmode = imgmode)
         allans = self.getAns(cnts)
         ans = ['' for _ in range(self.num)]
         for num, a in allans.items():
