@@ -44,9 +44,12 @@ def getMoment(cnts,bound=(200,50,4480,3980)):
 
     return Answer
 
-def getBlack(image,width=4500,height=4000):
+def getBlack(image,width=4500,height=4000,imgmode='RGB'):
     ### Picture Preprocess
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    if imgmode == 'GRAY':
+        gray = image
+    else:
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     blurred = cv2.GaussianBlur(gray, (5,5), 0)
     edged = auto_canny(blurred)
     cnts = cv2.findContours(edged, cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)

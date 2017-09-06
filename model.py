@@ -213,8 +213,8 @@ class Model():
         test_id = ''.join([x for x in result.values()])
         return test_id
 
-    def result(self,image):
-        cnts = check.getBlack(image)
+    def result(self,image,imgmode = 'RGB'):
+        cnts = check.getBlack(image, imgmode)
         allans = self.getAns(cnts)
         ans = ['' for _ in range(self.num)]
         for num, a in allans.items():
