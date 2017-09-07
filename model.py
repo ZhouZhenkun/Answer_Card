@@ -219,8 +219,8 @@ class Model():
         ans = ['' for _ in range(self.num)]
         for num, a in allans.items():
             ans[num - 1] = a
-        sid = self.getStudendID(cnts)
-        tid = self.getTestID(cnts)
+        sid = self.getStudendID(cnts)[::-1]
+        tid = self.getTestID(cnts)[::-1]
         return {'ans':ans,'sid':sid,'tid':tid}
 
 
