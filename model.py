@@ -27,14 +27,6 @@ class Model():
         self.border_offset = 10
         self.border_width = 10
 
-    def test(self,str):
-        for l in locals():
-            print(l)
-        print('')
-        print('')
-        for g in globals():
-            print(g)
-        
 ###############################################################
                     # Make Model
 ###############################################################
@@ -69,22 +61,21 @@ class Model():
             self.drawText(''.join(self.questNum()), location=location )
 
     def optionChain(self,sequence,path='icon'):
-        files = ['icon/{}.png'.format(c) for c in sequence ]
-        
+        files = ['{}/{}.png'.format(path,c) for c in sequence ]
         try :
             images = list(map(Image.open, files))
         except :
             self.wp = word.wordPicture()
             for i,f in enumerate(files):
+                # assert os.path.exists(f), "Noooooooo!"
                 if not os.path.exists(f) :
-                    # assert False, "NOOOOOOO"
                     self.wp.draw_word_in_circle(f[-5],path=path)
             images = list(map(Image.open, files))
         widths, heights = zip(*(i.size for i in images))
         total_width = sum(widths)
         max_height = max(heights)
         assert max_height == self.pic_size and total_width == (len(sequence) * self.pic_size), \
-            'Make Sure the size of icon/*.png is {}x{}'.format(self.pic_size,self.pic_size)
+            'Make Sure the size of {}/*.png is {}x{}'.format(path,self.pic_size,self.pic_size)
         option = Image.new('RGBA', (total_width, max_height),(255,255,255,0))
         x = 0
         block = []
