@@ -197,18 +197,18 @@ class Model():
         return result
 
     def getAns(self,cnts):
-        ansm = check.getMoment(cnts,bound=(self.font_size*2,self.questStart,self.width-self.padding,self.height-self.padding))
+        ansm = check.getMoment(cnts,bound=(self.font_size*1,self.questStart,self.width-self.padding,self.height-self.padding))
         ans = self.display_moment(ansm,self.quest_option)
         return ans
 
     def getStudendID(self,cnts):
-        sm = check.getMoment(cnts,bound=(self.font_size*2,self.padding,int(self.width/2),self.questStart-self.font_size))
+        sm = check.getMoment(cnts,bound=(self.font_size*1,int(self.padding/2),int(self.width/2),self.questStart-self.font_size))
         result = self.display_moment(sm,self.student_option)
         student_id = ''.join([x for x in result.values()])
         return student_id
 
     def getTestID(self,cnts):
-        tm = check.getMoment(cnts,bound=(int(self.width/2),self.padding,self.width-self.padding,self.questStart-self.font_size))
+        tm = check.getMoment(cnts,bound=(int(self.width/2),int(self.padding/2),self.width-self.padding,self.questStart-self.font_size))
         result = self.display_moment(tm,self.test_option)
         test_id = ''.join([x for x in result.values()])
         return test_id
