@@ -1,8 +1,8 @@
 from model import *
 
 model = Model()
-model.studentID('190037')
-model.testID('A1234')
+model.studentID()
+model.testID()
 model.quest(75 ,'ABCDEFGHIJ')
 model.border()
 model.save()
