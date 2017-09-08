@@ -3,7 +3,7 @@ from PIL import Image, ImageDraw, ImageFont
 import cv2
 import numpy as np
 import check
-import word
+import word 
 
 class Model():
 
@@ -61,17 +61,14 @@ class Model():
             self.drawText(''.join(self.questNum()), location=location )
         
     def optionChain(self,sequence):
-        try: 
-            files = ['icon/{}.png'.format(c) for c in sequence ]
-        except :
-            for c in sequence :
-                try :
-                    draw_word_in_circle(c,path='./icon/')
-                except :
-                    logging.warning('Directory not found, try to build \"icon\"')
-                    os.mkdir('icon')
-                    draw_word_in_circle(c,path='./icon/')
-            files = ['icon/{}.png'.format(c) for c in sequence ]
+        files = ['icon/{}.png'.format(c) for c in sequence ]
+        # for c in sequence :
+        #     try :
+        #         draw_word_in_circle(c,path='./icon/')
+        #     except :
+        #         logging.warning('Directory not found, try to build \"icon\"')
+        #         os.mkdir('icon')
+        #         draw_word_in_circle(c,path='./icon/')
         images = list(map(Image.open, files))
         widths, heights = zip(*(i.size for i in images))
         total_width = sum(widths)
@@ -158,25 +155,37 @@ class Model():
 ####################            自訂              ##############################
     
     # 學號格
-    def studentID(self,digits):
+    def studentID(self,pre=None):
         self.drawText('學',location=(self.padding,200))
         self.drawText('號',location=(self.padding,400))
-        image = self.optionRect(digits,'1234567890',(200,self.padding),self.student_option)
+        # Customize
+        image = self.optionRect(6,'1234567890',(200,self.padding),self.student_option)
+
         self.questBorderY(image.size[1]+self.pic_size+int(self.padding/2))
+        if pre != None :
+            self.predraw(pre,self.student_option)
     
     # 測驗格 
-    def testID(self):
+    def testID(self,pre=None):
         offset = int(self.width/2)
         self.drawText('考',location=(offset + self.padding,150))
         self.drawText('卷',location=(offset + self.padding,270))
         self.drawText('編',location=(offset + self.padding,390))
         self.drawText('號',location=(offset + self.padding,510))
-        image = self.optionRect(1,'ABCDEFGHIJ',(offset + 200,self.padding), self.test_option)
-        image = self.optionRect(5,'1234567890',(offset + 200,image.size[1]+self.padding), self.test_option)
+        # Customize
+        image = self.optionRect(1,'ABCDEFGHIJ',(offset + 200, self.padding), self.test_option)
+        image = self.optionRect(5,'1234567890',(offset + 200, image.size[1]+self.padding), self.test_option)
+
         self.questBorderY(image.size[1]+self.pic_size+int(self.padding/2))
+        if pre != None :
+            self.predraw(pre,self.test_option)
 
-
-
+    def predraw(self,pre,stored):
+        for index,selected in enumerate(pre):
+            option = stored[0][index].find(selected)
+            assert option != -1 , "Predraw Failed, must same with model, check the predrawing value again."
+            situation = stored[1][index][option]
+            self.draw.ellipse((situation[0]+15, situation[1]+15, situation[0]+self.pic_size-15, situation[1]+self.pic_size-15), fill = 'black')
 
 ###############################################################
                     # Check Answer
@@ -206,13 +215,14 @@ class Model():
         return result
 
     def getAns(self,cnts):
-        ansm = check.getMoment(cnts,bound=(self.font_size*2,self.questStart,self.width-self.padding,self.height-self.padding))
+        ansm = check.getMoment(cnts,bound=(self.font_size*1,self.questStart,self.width-self.padding,self.height-self.padding))
         ans = self.display_moment(ansm,self.quest_option)
         return ans
 
     def getStudendID(self,cnts):
-        sm = check.getMoment(cnts,bound=(self.font_size*2,self.padding,int(self.width/2),self.questStart-self.font_size))
+        sm = check.getMoment(cnts,bound=(self.font_size*1,self.padding,int(self.width/2),self.questStart-self.font_size))
         result = self.display_moment(sm,self.student_option)
+        # print(result)
         student_id = ''.join([x for x in result.values()])
         return student_id
 
