@@ -2,8 +2,9 @@
 from PIL import Image, ImageDraw, ImageFont
 import cv2
 import numpy as np
-from . import check
-from .word import *
+import os.path
+import check 
+import word
 
 class Model():
 
@@ -26,7 +27,14 @@ class Model():
         self.border_offset = 10
         self.border_width = 10
 
-
+    def test(self,str):
+        for l in locals():
+            print(l)
+        print('')
+        print('')
+        for g in globals():
+            print(g)
+        
 ###############################################################
                     # Make Model
 ###############################################################
@@ -60,9 +68,18 @@ class Model():
             location = (self.quest_left + self.padding, self.questStart+(self.count%max)*(self.font_size))
             self.drawText(''.join(self.questNum()), location=location )
 
-    def optionChain(self,sequence):
+    def optionChain(self,sequence,path='icon'):
         files = ['icon/{}.png'.format(c) for c in sequence ]
-        images = list(map(Image.open, files))
+        
+        try :
+            images = list(map(Image.open, files))
+        except :
+            self.wp = word.wordPicture()
+            for i,f in enumerate(files):
+                if not os.path.exists(f) :
+                    # assert False, "NOOOOOOO"
+                    self.wp.draw_word_in_circle(f[-5],path=path)
+            images = list(map(Image.open, files))
         widths, heights = zip(*(i.size for i in images))
         total_width = sum(widths)
         max_height = max(heights)

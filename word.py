@@ -89,6 +89,8 @@ class wordPicture():
     def draw_word_in_circle(self, letter, color=(190,190,190), path='./'):
         if not path.endswith('/') :
             path += '/'
+        if not os.path.exists(os.path.dirname(path)) :
+            os.mkdir(os.path.dirname(path))
         letter = str(letter)
         file_name = path + letter + '.png'
         self.draw_init(letter)
@@ -100,5 +102,5 @@ class wordPicture():
 # Usage
 # wp = wordPicture()
 # for c in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890+-' :
-#     wp.draw_word_in_circle(c,path='./icon')
+#     wp.draw_word_in_circle(c,path='icon')
         
