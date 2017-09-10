@@ -10,16 +10,13 @@ from imutils import contours
 import argparse
 import imutils
 import cv2
-  
-# # construct the argument parse and parse the arguments
-# ap = argparse.ArgumentParser()
-# ap.add_argument("-i", "--image", required=True,
-#     help="path to the input image")
-# args = vars(ap.parse_args())
 
-# # define the answer key which maps the question number
-# # to the correct answer
-# ANSWER_KEY = {0: 1, 1: 4, 2: 0, 3: 3, 4: 1}
+
+# Debug
+path = '../test/4.png'
+print("Drawing checked result in result.png")
+
+
 
 # Re
 width1 = 4500
@@ -49,7 +46,7 @@ def auto_canny(image, sigma=0.33):
 
 ### Picture Preprocess
 # Read Picture 
-image = cv2.imread('./test/test600-p3.png')
+image = cv2.imread(path)
 # image = cv2.imread('./test/yooo.png')
 # display(image)
 # Convert into gray Picture 
@@ -234,7 +231,8 @@ print(result)
 
 
 # display(paper)
-cv2.imwrite("./ans.png", paper, [int(cv2.IMWRITE_PNG_COMPRESSION), 9])  
+cv2.imwrite("./result.png", paper, [int(cv2.IMWRITE_PNG_COMPRESSION), 9])  
+print("Completed")
 # paper.
 
 

@@ -37,7 +37,7 @@ draw = ImageDraw.Draw(img)
 # y=50
 # r=50
 # bound = [5, 19, 105, 119]
-# draw_ellipse(img,bound, outline ='black',width=5)
+draw_ellipse(img,bound, outline ='black',width=5)
 # draw.ellipse((x-r, y-r, x+r, y+r), fill=(255,0,0,0))
 
 

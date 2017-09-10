@@ -2,8 +2,9 @@
 from PIL import Image, ImageDraw, ImageFont
 import cv2
 import numpy as np
-from . import check
-from .word import *
+import os.path
+import check 
+import word
 
 class Model():
 
@@ -25,7 +26,6 @@ class Model():
         self.questStart = -1
         self.border_offset = 10
         self.border_width = 10
-
 
 ###############################################################
                     # Make Model
@@ -60,14 +60,22 @@ class Model():
             location = (self.quest_left + self.padding, self.questStart+(self.count%max)*(self.font_size))
             self.drawText(''.join(self.questNum()), location=location )
 
-    def optionChain(self,sequence):
-        files = ['icon/{}.png'.format(c) for c in sequence ]
-        images = list(map(Image.open, files))
+    def optionChain(self,sequence,path='rect'):
+        files = ['{}/{}.png'.format(path,c) for c in sequence ]
+        try :
+            images = list(map(Image.open, files))
+        except :
+            self.wp = word.wordPicture()
+            for i,f in enumerate(files):
+                # assert os.path.exists(f), "Noooooooo!"
+                if not os.path.exists(f) :
+                    self.wp.draw_word_in_circle(f[-5],path=path)
+            images = list(map(Image.open, files))
         widths, heights = zip(*(i.size for i in images))
         total_width = sum(widths)
         max_height = max(heights)
         assert max_height == self.pic_size and total_width == (len(sequence) * self.pic_size), \
-            'Make Sure the size of icon/*.png is {}x{}'.format(self.pic_size,self.pic_size)
+            'Make Sure the size of {}/*.png is {}x{}'.format(path,self.pic_size,self.pic_size)
         option = Image.new('RGBA', (total_width, max_height),(255,255,255,0))
         x = 0
         block = []
@@ -149,25 +157,37 @@ class Model():
 ####################            自訂              ##############################
 
     # 學號格
-    def studentID(self,digits):
+    def studentID(self,pre=None):
         self.drawText('學',location=(self.padding,200))
         self.drawText('號',location=(self.padding,400))
-        image = self.optionRect(digits,'1234567890',(200,self.padding),self.student_option)
-        self.questBorderY(image.size[1]+self.pic_size+int(self.padding/2))
+        # Customize
+        image = self.optionRect(6,'1234567890',(200,self.padding),self.student_option)
 
+        self.questBorderY(image.size[1]+self.pic_size+int(self.padding/2))
+        if pre != None :
+            self.predraw(pre,self.student_option)
+    
     # 測驗格 
-    def testID(self):
+    def testID(self,pre=None):
         offset = int(self.width/2)
         self.drawText('考',location=(offset + self.padding,150))
         self.drawText('卷',location=(offset + self.padding,270))
         self.drawText('編',location=(offset + self.padding,390))
         self.drawText('號',location=(offset + self.padding,510))
-        image = self.optionRect(1,'ABCDEFGHIJ',(offset + 200,self.padding), self.test_option)
-        image = self.optionRect(5,'1234567890',(offset + 200,image.size[1]+self.padding), self.test_option)
+        # Customize
+        image = self.optionRect(1,'ABCDEFGHIJ',(offset + 200, self.padding), self.test_option)
+        image = self.optionRect(5,'1234567890',(offset + 200, image.size[1]+self.padding), self.test_option)
+
         self.questBorderY(image.size[1]+self.pic_size+int(self.padding/2))
+        if pre != None :
+            self.predraw(pre,self.test_option)
 
-
-
+    def predraw(self,pre,stored):
+        for index,selected in enumerate(pre):
+            option = stored[0][index].find(selected)
+            assert option != -1 , "Predraw Failed, must same with model, check the predrawing value again."
+            situation = stored[1][index][option]
+            self.draw.ellipse((situation[0]+15, situation[1]+15, situation[0]+self.pic_size-15, situation[1]+self.pic_size-15), fill = 'black')
 
 ###############################################################
                     # Check Answer
@@ -204,6 +224,7 @@ class Model():
     def getStudendID(self,cnts):
         sm = check.getMoment(cnts,bound=(self.font_size*1,int(self.padding/2),int(self.width/2),self.questStart-self.font_size))
         result = self.display_moment(sm,self.student_option)
+        # print(result)
         student_id = ''.join([x for x in result.values()])
         return student_id
 
