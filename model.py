@@ -60,7 +60,7 @@ class Model():
             location = (self.quest_left + self.padding, self.questStart+(self.count%max)*(self.font_size))
             self.drawText(''.join(self.questNum()), location=location )
 
-    def optionChain(self,sequence,path='icon'):
+    def optionChain(self,sequence,path='rect'):
         files = ['{}/{}.png'.format(path,c) for c in sequence ]
         try :
             images = list(map(Image.open, files))

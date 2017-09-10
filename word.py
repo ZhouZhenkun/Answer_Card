@@ -11,9 +11,6 @@ import logging
 class wordPicture():
     
     def __init__(self, font_size=75): 
-        self.font_size = font_size
-        self.image_size = (self.font_size*3, self.font_size*3)
-        self.font = ImageFont.truetype("unicode.ttf", self.font_size, encoding="unic")
         self.image = None 
 
     # From  https://stackoverflow.com/questions/32504246/draw-ellipse-in-python-pil-with-line-thickness
@@ -30,10 +27,12 @@ class wordPicture():
         mask = mask.resize(image.size, Image.LANCZOS)
         image.paste(outline, mask=mask)
 
-    def draw_init(self, character):
-        self.image = Image.new("RGBA", self.image_size ,(255,255,255,0))
+    def draw_init(self, character, font_size=75):
+        image_size = (font_size*3, font_size*3)
+        self.image = Image.new("RGBA", image_size ,(255,255,255,0))
         self.draw = ImageDraw.Draw(self.image)
-        self.draw.text( (self.font_size, int(self.font_size/2)) ,character,(0,0,0),font = self.font)
+        self.font = ImageFont.truetype("unicode.ttf", font_size, encoding="unic")
+        self.draw.text( (font_size, int(font_size/2)) ,character,(0,0,0),font = self.font)
         
     def findHeart(self):
         assert self.image != None , "Draw a letter before find the center of letter."
@@ -58,8 +57,21 @@ class wordPicture():
         circle = [int(cx)-radius,int(cy)-radius,int(cx)+radius,int(cy)+radius]
         self.draw_circle(self.image,circle, outline =(0,0,0),width=width)
         bound = (int(cx)-radius-width-padding,int(cy)-radius-width-padding,int(cx)+radius+width+padding,int(cy)+radius+width+padding)
-        self.image = self.image.crop(bound)
+        return bound
 
+    def rect(self,cor,thick):
+        for i in range(thick):
+            self.draw.rectangle(cor ,outline=(0,0,0))
+            cor = (cor[0]+1,cor[1]+1, cor[2]-1,cor[3]-1)
+
+
+    def place_rectangle(self, heart, width=5, padding=10) :
+        cx,cy = heart
+        cor = [int(cx)-50,int(cy)+30,int(cx)+50,int(cy)+65]
+        self.rect(cor, thick=5)
+        bound = (int(cx)-60 ,int(cy)-40,int(cx)+60,int(cy)+80)
+        return bound
+        
 
     def setColor(self,color = (255,255,255)):
         assert self.image != None , "Draw a letter before setColor."
@@ -94,13 +106,27 @@ class wordPicture():
         letter = str(letter)
         file_name = path + letter + '.png'
         self.draw_init(letter)
-        self.place_circle(self.findHeart(),radius=45, width=5, padding=10)
+        bound = self.place_circle(self.findHeart(),radius=45, width=5, padding=10)
+        self.image = self.image.crop(bound)
         self.setColor(color)
         self.save(file_name)
 
+    def draw_word_with_rectangle(self, letter, color=(190,190,190), path='./'):
+        if not path.endswith('/') :
+            path += '/'
+        if not os.path.exists(os.path.dirname(path)) :
+            os.mkdir(os.path.dirname(path))
+        letter = str(letter)
+        file_name = path + letter + '.png'
+        self.draw_init(letter,70)
+        bound = self.place_rectangle(self.findHeart(), width=5, padding=10)
+        self.image = self.image.crop(bound)
+        self.setColor(color)
+        self.save(file_name)
 
-# Usage
+        
+# # Usage
 # wp = wordPicture()
 # for c in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890+-' :
-#     wp.draw_word_in_circle(c,path='icon')
-        
+#     wp.draw_word_in_circle(c,path='icon')      
+#     wp.draw_word_with_rectangle(c,path='rect')      
