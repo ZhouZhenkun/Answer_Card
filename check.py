@@ -7,6 +7,20 @@ from imutils import contours
 import argparse
 import imutils
 import cv2
+import os
+
+def saveimg(image):
+    #cv2.namedWindow("Image") 
+    #cv2.imshow("Image", image)  
+    #cv2.waitKey (0)  
+    print("Output the image ...  \'ans.png\'")
+    print(os.path.abspath(os.path.dirname(__file__)))
+    i = 1
+    while(os.path.isfile("./error/ans" + str(i) + "_.png")):
+        i +=1
+    fname = "./error/ans" + str(i) + "_.png"
+    cv2.imwrite(fname, image, [int(cv2.IMWRITE_PNG_COMPRESSION), 9]) 
+    #cv2.destroyAllWindows()  
 
 def display(image):
     cv2.namedWindow("Image") 
@@ -14,7 +28,7 @@ def display(image):
     cv2.waitKey (0)  
     print("Output the image ...  \'ans.png\'")
     cv2.imwrite("./ans.png", paper, [int(cv2.IMWRITE_PNG_COMPRESSION), 9]) 
-    cv2.destroyAllWindows()  
+    #cv2.destroyAllWindows()  
 
 
 def auto_canny(image, sigma=0.33):
@@ -69,6 +83,11 @@ def getBlack(image,width=4500,height=4000,imgmode='RGB'):
                 break
 
     ### 
+    #display(cv2.polylines(gray,[docCnt.reshape(4,2)],1, (150,0,0,255),2))
+    color = cv2.cvtColor(gray, cv2.COLOR_GRAY2BGR)
+    color1 = color.copy()
+    color1 = cv2.fillPoly(color1,[docCnt.reshape(4,2)],(0,0,255,100))
+    saveimg(cv2.addWeighted(color, 0.5, color1, 0.5, 0))
     warped = four_point_transform(gray, docCnt.reshape(4,2))
 
     ### Recognized Multiple Choose
