@@ -3,8 +3,8 @@ from PIL import Image, ImageDraw, ImageFont
 import cv2
 import numpy as np
 import os.path
-import check 
-import word
+from .check import *
+from . import word
 
 class Model():
 
@@ -24,8 +24,8 @@ class Model():
         self.test_option = [[],[]]
         self.student_option = [[],[]]
         self.questStart = -1
-        self.border_offset = 10
-        self.border_width = 10
+        self.border_offset = 0
+        self.border_width = 30
 
 ###############################################################
                     # Make Model
