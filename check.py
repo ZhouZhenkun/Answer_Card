@@ -84,10 +84,10 @@ def getBlack(image,width=4500,height=4000,imgmode='RGB'):
 
     ### 
     #display(cv2.polylines(gray,[docCnt.reshape(4,2)],1, (150,0,0,255),2))
-    color = cv2.cvtColor(gray, cv2.COLOR_GRAY2BGR)
-    color1 = color.copy()
-    color1 = cv2.fillPoly(color1,[docCnt.reshape(4,2)],(0,0,255,100))
-    saveimg(cv2.addWeighted(color, 0.5, color1, 0.5, 0))
+    #color = cv2.cvtColor(gray, cv2.COLOR_GRAY2BGR)
+    #color1 = color.copy()
+    #color1 = cv2.fillPoly(color1,[docCnt.reshape(4,2)],(0,0,255,100))
+    #saveimg(cv2.addWeighted(color, 0.5, color1, 0.5, 0))
     warped = four_point_transform(gray, docCnt.reshape(4,2))
 
     ### Recognized Multiple Choose
