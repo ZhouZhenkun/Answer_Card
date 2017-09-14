@@ -3,8 +3,7 @@ from PIL import Image, ImageDraw, ImageFont
 import cv2
 import numpy as np
 import os.path
-from .check import *
-from . import word
+from . import check, word
 
 class Model():
 
