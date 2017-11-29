@@ -3,7 +3,7 @@ from model import *
 model = Model()
 model.studentID()
 model.testID()
-model.quest(75 ,'ABCDEFGHIJ')
+model.quest(50 ,'1234567890-±')
 model.border()
 model.save()
 

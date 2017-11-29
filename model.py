@@ -3,7 +3,7 @@ from PIL import Image, ImageDraw, ImageFont
 import cv2
 import numpy as np
 import os.path
-from . import check, word
+import check, word
 
 class Model():
 
@@ -68,7 +68,8 @@ class Model():
             for i,f in enumerate(files):
                 # assert os.path.exists(f), "Noooooooo!"
                 if not os.path.exists(f) :
-                    self.wp.draw_word_in_circle(f[-5],path=path)
+                    self.wp.draw_word_with_rectangle(f[-5],path=path)
+                    # self.wp.draw_word_in_circle(f[-5],path=path)
             images = list(map(Image.open, files))
         widths, heights = zip(*(i.size for i in images))
         total_width = sum(widths)
